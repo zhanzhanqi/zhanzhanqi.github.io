@@ -1,0 +1,199 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 博客主题 - 优雅的蓝灰色调 */
+    --background: 210 20% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    
+    /* 主色调 - 优雅的靛蓝色 */
+    --primary: 230 65% 55%;
+    --primary-foreground: 210 40% 98%;
+    --primary-glow: 230 65% 70%;
+    
+    /* 次要色调 */
+    --secondary: 210 25% 93%;
+    --secondary-foreground: 222 47% 11%;
+    
+    /* 柔和色调 */
+    --muted: 210 20% 94%;
+    --muted-foreground: 215 16% 47%;
+    
+    /* 强调色 - 温暖的珊瑚色 */
+    --accent: 15 80% 60%;
+    --accent-foreground: 0 0% 100%;
+    
+    /* 功能色 */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 230 65% 55%;
+    --radius: 0.75rem;
+
+    /* 自定义渐变 */
+    --gradient-hero: linear-gradient(135deg, hsl(230 65% 55%) 0%, hsl(260 60% 60%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 20% 98%) 100%);
+    
+    /* 自定义阴影 */
+    --shadow-soft: 0 4px 20px -4px hsl(230 65% 55% / 0.15);
+    --shadow-card: 0 2px 12px -2px hsl(222 47% 11% / 0.08);
+    --shadow-hover: 0 8px 30px -8px hsl(230 65% 55% / 0.25);
+  }
+
+  .dark {
+    --background: 222 47% 8%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 230 65% 65%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 15 80% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 230 65% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  /* Markdown 渲染样式 */
+  .prose-blog {
+    @apply text-foreground leading-relaxed;
+  }
+  
+  .prose-blog h1 {
+    @apply text-3xl font-bold mt-8 mb-4 text-foreground;
+  }
+  
+  .prose-blog h2 {
+    @apply text-2xl font-semibold mt-6 mb-3 text-foreground;
+  }
+  
+  .prose-blog h3 {
+    @apply text-xl font-semibold mt-5 mb-2 text-foreground;
+  }
+  
+  .prose-blog p {
+    @apply my-4 text-foreground/90 leading-7;
+  }
+  
+  .prose-blog ul {
+    @apply my-4 ml-6 list-disc space-y-2;
+  }
+  
+  .prose-blog ol {
+    @apply my-4 ml-6 list-decimal space-y-2;
+  }
+  
+  .prose-blog li {
+    @apply text-foreground/90;
+  }
+  
+  .prose-blog blockquote {
+    @apply border-l-4 border-primary pl-4 my-4 italic text-muted-foreground;
+  }
+  
+  .prose-blog code {
+    @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-primary;
+  }
+  
+  .prose-blog pre {
+    @apply bg-muted p-4 rounded-lg my-4 overflow-x-auto;
+  }
+  
+  .prose-blog pre code {
+    @apply bg-transparent p-0 text-foreground;
+  }
+  
+  .prose-blog a {
+    @apply text-primary underline underline-offset-2 hover:text-primary/80 transition-colors;
+  }
+  
+  .prose-blog img {
+    @apply rounded-lg my-4 max-w-full;
+  }
+  
+  .prose-blog hr {
+    @apply my-8 border-border;
+  }
+  
+  .prose-blog table {
+    @apply w-full my-4 border-collapse;
+  }
+  
+  .prose-blog th {
+    @apply border border-border bg-muted px-4 py-2 text-left font-semibold;
+  }
+  
+  .prose-blog td {
+    @apply border border-border px-4 py-2;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-hero);
+  }
+  
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  
+  .shadow-hover {
+    box-shadow: var(--shadow-hover);
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { 
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
