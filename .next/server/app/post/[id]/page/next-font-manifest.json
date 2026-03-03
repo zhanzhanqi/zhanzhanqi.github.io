@@ -1,0 +1,11 @@
+{
+  "pages": {},
+  "app": {
+    "[project]/workplace/catchertherye/app/post/[id]/page": [
+      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2",
+      "static/media/f112ed7f0b91582f-s.p.12569d31.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pagesUsingSizeAdjust": false
+}

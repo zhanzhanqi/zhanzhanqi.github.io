@@ -1,32 +1,17 @@
-'use client'
-
-import { useState } from 'react'
+import { getAllPosts, getAllPostIds, getPostById } from '@/lib/posts'
 import BlogHome from '@/components/blog-home'
-import BlogEditor from '@/components/blog-editor'
 import BlogPostView from '@/components/blog-post-view'
 
-type ViewType = 'home' | 'editor' | 'post'
+// 生成所有文章页面的静态参数
+export function generateStaticParams() {
+  const ids = getAllPostIds()
+  return ids.map(id => ({
+    postId: id,
+  }))
+}
 
 export default function Page() {
-  const [currentView, setCurrentView] = useState<ViewType>('home')
-  const [currentPostId, setCurrentPostId] = useState<string | undefined>()
+  const posts = getAllPosts()
 
-  const handleNavigate = (view: ViewType, postId?: string) => {
-    setCurrentView(view)
-    setCurrentPostId(postId)
-  }
-
-  return (
-    <>
-      {currentView === 'home' && (
-        <BlogHome onNavigate={handleNavigate} />
-      )}
-      {currentView === 'editor' && (
-        <BlogEditor postId={currentPostId} onNavigate={handleNavigate} />
-      )}
-      {currentView === 'post' && currentPostId && (
-        <BlogPostView postId={currentPostId} onNavigate={handleNavigate} />
-      )}
-    </>
-  )
+  return <BlogHome posts={posts} />
 }

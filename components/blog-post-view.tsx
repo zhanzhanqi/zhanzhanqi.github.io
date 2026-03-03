@@ -1,63 +1,31 @@
-'use client'
-
-import { useState, useEffect } from 'react'
-import { BlogPost, getPost } from '@/lib/blog'
+import { BlogPost } from '@/lib/posts'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import MarkdownRenderer from '@/components/markdown-renderer'
-import { ArrowLeft, Calendar, Tag, Edit, BookOpen } from 'lucide-react'
+import { ArrowLeft, Calendar, Tag, BookOpen } from 'lucide-react'
 import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
+import Link from 'next/link'
 
 interface BlogPostViewProps {
-  postId: string
-  onNavigate: (view: 'home' | 'editor' | 'post', postId?: string) => void
+  post: BlogPost
 }
 
-export default function BlogPostView({ postId, onNavigate }: BlogPostViewProps) {
-  const [post, setPost] = useState<BlogPost | null>(null)
-
-  useEffect(() => {
-    const foundPost = getPost(postId)
-    setPost(foundPost)
-  }, [postId])
-
-  if (!post) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <BookOpen className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
-          <h2 className="text-xl font-medium text-muted-foreground mb-4">文章不存在</h2>
-          <Button onClick={() => onNavigate('home')} className="gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            返回首页
-          </Button>
-        </div>
-      </div>
-    )
-  }
-
+export default function BlogPostView({ post }: BlogPostViewProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Button 
-            variant="ghost" 
-            onClick={() => onNavigate('home')}
-            className="gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            返回
-          </Button>
-          <Button 
-            variant="outline"
-            onClick={() => onNavigate('editor', postId)}
-            className="gap-2"
-          >
-            <Edit className="h-4 w-4" />
-            编辑文章
-          </Button>
+          <Link href="/">
+            <Button 
+              variant="ghost" 
+              className="gap-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              返回
+            </Button>
+          </Link>
         </div>
       </header>
 
@@ -103,24 +71,15 @@ export default function BlogPostView({ postId, onNavigate }: BlogPostViewProps) 
 
         {/* Article Footer */}
         <footer className="mt-12 pt-8 border-t border-border">
-          <div className="flex items-center justify-between">
+          <Link href="/">
             <Button 
               variant="outline"
-              onClick={() => onNavigate('home')}
               className="gap-2"
             >
               <ArrowLeft className="h-4 w-4" />
               返回文章列表
             </Button>
-            <Button 
-              variant="ghost"
-              onClick={() => onNavigate('editor', postId)}
-              className="gap-2"
-            >
-              <Edit className="h-4 w-4" />
-              编辑这篇文章
-            </Button>
-          </div>
+          </Link>
         </footer>
       </article>
     </div>

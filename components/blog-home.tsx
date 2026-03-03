@@ -1,53 +1,34 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { BlogPost, getPosts, deletePost } from '@/lib/blog'
+import { useState } from 'react'
+import { BlogPost } from '@/lib/posts'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
-import { PenLine, BookOpen, Calendar, Tag, Trash2, Edit } from 'lucide-react'
+import { BookOpen, Calendar, Tag, Eye } from 'lucide-react'
 import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
+import Link from 'next/link'
 
 interface BlogHomeProps {
-  onNavigate: (view: 'home' | 'editor' | 'post', postId?: string) => void
+  posts: BlogPost[]
 }
 
-export default function BlogHome({ onNavigate }: BlogHomeProps) {
-  const [posts, setPosts] = useState<BlogPost[]>([])
+export default function BlogHome({ posts }: BlogHomeProps) {
 
-  useEffect(() => {
-    setPosts(getPosts())
-  }, [])
 
-  const handleDelete = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation()
-    if (window.confirm('确定要删除这篇文章吗？')) {
-      deletePost(id)
-      setPosts(getPosts())
-    }
-  }
-
-  const handleEdit = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation()
-    onNavigate('editor', id)
-  }
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div 
-            className="flex items-center gap-3 cursor-pointer" 
-            onClick={() => onNavigate('home')}
-          >
+          <Link href="/" className="flex items-center gap-3">
             <BookOpen className="h-7 w-7 text-primary" />
             <h1 className="text-xl font-semibold text-foreground">我的博客</h1>
+          </Link>
+          <div className="text-sm text-muted-foreground">
+            共 {posts.length} 篇文章
           </div>
-          <Button onClick={() => onNavigate('editor')} className="gap-2">
-            <PenLine className="h-4 w-4" />
-            写文章
-          </Button>
         </div>
       </header>
 
@@ -71,22 +52,20 @@ export default function BlogHome({ onNavigate }: BlogHomeProps) {
             <h3 className="text-xl font-medium text-muted-foreground mb-2">
               还没有文章
             </h3>
-            <p className="text-muted-foreground mb-6">
-              点击「写文章」按钮，开始你的创作之旅
+            <p className="text-muted-foreground">
+              在 content/posts 目录添加 Markdown 文件
             </p>
-            <Button onClick={() => onNavigate('editor')} className="gap-2">
-              <PenLine className="h-4 w-4" />
-              写第一篇文章
-            </Button>
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {posts.map((post, index) => (
-              <Card 
+              <Link 
                 key={post.id} 
-                className="group cursor-pointer hover:shadow-hover transition-all duration-300 animate-slide-up"
+                href={`/post/${post.id}`}
+              >
+              <Card 
+                className="group cursor-pointer hover:shadow-hover transition-all duration-300 animate-slide-up h-full"
                 style={{ animationDelay: `${index * 100}ms` }}
-                onClick={() => onNavigate('post', post.id)}
               >
                 <CardHeader>
                   <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors">
@@ -115,27 +94,14 @@ export default function BlogHome({ onNavigate }: BlogHomeProps) {
                     </div>
                   )}
                 </CardContent>
-                <CardFooter className="pt-0 gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="gap-1"
-                    onClick={(e) => handleEdit(post.id, e)}
-                  >
-                    <Edit className="h-3 w-3" />
-                    编辑
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="gap-1 text-destructive hover:text-destructive"
-                    onClick={(e) => handleDelete(post.id, e)}
-                  >
-                    <Trash2 className="h-3 w-3" />
-                    删除
-                  </Button>
+                <CardFooter className="pt-0">
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Eye className="h-3 w-3" />
+                    阅读更多
+                  </div>
                 </CardFooter>
               </Card>
+              </Link>
             ))}
           </div>
         )}
@@ -144,7 +110,7 @@ export default function BlogHome({ onNavigate }: BlogHomeProps) {
       {/* Footer */}
       <footer className="border-t border-border py-8 mt-12">
         <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
-          <p>使用 Markdown 写作，数据存储在本地浏览器中</p>
+          <p>使用 Markdown 写作，静态生成部署</p>
         </div>
       </footer>
     </div>
