@@ -50,6 +50,54 @@
         "x-next-revalidate-tag-token"
       ]
     },
+    "/category/%E4%BA%BA%E7%94%9F%E9%9A%8F%E7%AC%94": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/category/[slug]",
+      "dataRoute": "/category/%E4%BA%BA%E7%94%9F%E9%9A%8F%E7%AC%94.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/category/%E6%8A%80%E6%9C%AF%E6%80%9D%E8%80%83": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/category/[slug]",
+      "dataRoute": "/category/%E6%8A%80%E6%9C%AF%E6%80%9D%E8%80%83.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
     "/": {
       "experimentalBypassFor": [
         {
@@ -74,7 +122,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/post/markdown-guide": {
+    "/post/%E4%BA%BA%E7%94%9F%E9%9A%8F%E7%AC%94/memory": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -87,8 +135,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/post/[id]",
-      "dataRoute": "/post/markdown-guide.rsc",
+      "srcRoute": "/post/[...id]",
+      "dataRoute": "/post/%E4%BA%BA%E7%94%9F%E9%9A%8F%E7%AC%94/memory.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -98,7 +146,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/post/welcome": {
+    "/post/%E4%BA%BA%E7%94%9F%E9%9A%8F%E7%AC%94/welcome": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -111,8 +159,32 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/post/[id]",
-      "dataRoute": "/post/welcome.rsc",
+      "srcRoute": "/post/[...id]",
+      "dataRoute": "/post/%E4%BA%BA%E7%94%9F%E9%9A%8F%E7%AC%94/welcome.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/post/%E6%8A%80%E6%9C%AF%E6%80%9D%E8%80%83/markdown-guide": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/post/[...id]",
+      "dataRoute": "/post/%E6%8A%80%E6%9C%AF%E6%80%9D%E8%80%83/markdown-guide.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",
@@ -124,7 +196,7 @@
     }
   },
   "dynamicRoutes": {
-    "/post/[id]": {
+    "/category/[slug]": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -136,11 +208,38 @@
           "value": "multipart/form-data;.*"
         }
       ],
-      "routeRegex": "^/post/([^/]+?)(?:/)?$",
-      "dataRoute": "/post/[id].rsc",
+      "routeRegex": "^/category/([^/]+?)(?:/)?$",
+      "dataRoute": "/category/[slug].rsc",
       "fallback": null,
       "fallbackRouteParams": [],
-      "dataRouteRegex": "^/post/([^/]+?)\\.rsc$",
+      "dataRouteRegex": "^/category/([^/]+?)\\.rsc$",
+      "prefetchDataRoute": null,
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/post/[...id]": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "routeRegex": "^/post/(.+?)(?:/)?$",
+      "dataRoute": "/post/[...id].rsc",
+      "fallback": null,
+      "fallbackRouteParams": [],
+      "dataRouteRegex": "^/post/(.+?)\\.rsc$",
       "prefetchDataRoute": null,
       "allowHeader": [
         "host",

@@ -22,12 +22,20 @@
   },
   "dynamicRoutes": [
     {
-      "page": "/post/[id]",
-      "regex": "^/post/([^/]+?)(?:/)?$",
+      "page": "/category/[slug]",
+      "regex": "^/category/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPslug": "nxtPslug"
+      },
+      "namedRegex": "^/category/(?<nxtPslug>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/post/[...id]",
+      "regex": "^/post/(.+?)(?:/)?$",
       "routeKeys": {
         "nxtPid": "nxtPid"
       },
-      "namedRegex": "^/post/(?<nxtPid>[^/]+?)(?:/)?$"
+      "namedRegex": "^/post/(?<nxtPid>.+?)(?:/)?$"
     }
   ],
   "staticRoutes": [

@@ -1,0 +1,17 @@
+{
+  "status": 404,
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/category/layout,_N_T_/category/[slug]/layout,_N_T_/category/[slug]/page,_N_T_/category/%25E6%258A%2580%25E6%259C%25AF%25E6%2580%259D%25E8%2580%2583"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/category/$d$slug/__PAGE__",
+    "/category/$d$slug",
+    "/category",
+    "/_index",
+    "/_head"
+  ]
+}

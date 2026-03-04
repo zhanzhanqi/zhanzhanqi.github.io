@@ -8,39 +8,77 @@ export interface BlogPost {
   title: string
   content: string
   excerpt: string
+  category: string
   createdAt: string
   updatedAt: string
   tags: string[]
 }
 
+// 分类类型
+export interface Category {
+  name: string
+  slug: string
+  count: number
+}
+
 const postsDirectory = path.join(process.cwd(), 'content/posts')
 
-// 获取所有文章
-export function getAllPosts(): BlogPost[] {
-  // 确保目录存在
+// 获取所有分类
+export function getAllCategories(): Category[] {
   if (!fs.existsSync(postsDirectory)) {
     return []
   }
 
-  const fileNames = fs.readdirSync(postsDirectory)
-  const allPosts = fileNames
-    .filter(fileName => fileName.endsWith('.md'))
-    .map(fileName => {
-      const id = fileName.replace(/\.md$/, '')
-      const fullPath = path.join(postsDirectory, fileName)
-      const fileContents = fs.readFileSync(fullPath, 'utf8')
-      const { data, content } = matter(fileContents)
-
+  const items = fs.readdirSync(postsDirectory, { withFileTypes: true })
+  const categories = items
+    .filter(item => item.isDirectory())
+    .map(dir => {
+      const categoryPath = path.join(postsDirectory, dir.name)
+      const files = fs.readdirSync(categoryPath).filter(f => f.endsWith('.md'))
       return {
-        id,
-        title: data.title || '无标题',
-        content,
-        excerpt: generateExcerpt(content),
-        createdAt: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
-        updatedAt: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
-        tags: data.tags || [],
+        name: dir.name,
+        slug: dir.name,
+        count: files.length
       }
     })
+    .filter(cat => cat.count > 0)
+
+  return categories
+}
+
+// 获取所有文章（可选按分类筛选）
+export function getAllPosts(category?: string): BlogPost[] {
+  const categories = category ? [category] : getAllCategories().map(c => c.slug)
+  
+  let allPosts: BlogPost[] = []
+
+  for (const cat of categories) {
+    const categoryPath = path.join(postsDirectory, cat)
+    if (!fs.existsSync(categoryPath)) continue
+
+    const fileNames = fs.readdirSync(categoryPath)
+    const posts = fileNames
+      .filter(fileName => fileName.endsWith('.md'))
+      .map(fileName => {
+        const id = `${cat}/${fileName.replace(/\.md$/, '')}`
+        const fullPath = path.join(categoryPath, fileName)
+        const fileContents = fs.readFileSync(fullPath, 'utf8')
+        const { data, content } = matter(fileContents)
+
+        return {
+          id,
+          title: data.title || '无标题',
+          content,
+          excerpt: generateExcerpt(content),
+          category: data.category || cat,
+          createdAt: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
+          updatedAt: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
+          tags: data.tags || [],
+        }
+      })
+
+    allPosts = allPosts.concat(posts)
+  }
 
   // 按日期降序排序
   return allPosts.sort((a, b) => 
@@ -51,7 +89,11 @@ export function getAllPosts(): BlogPost[] {
 // 获取单篇文章
 export function getPostById(id: string): BlogPost | null {
   try {
-    const fullPath = path.join(postsDirectory, `${id}.md`)
+    // id 格式: "category/filename"
+    const [category, filename] = id.split('/')
+    if (!category || !filename) return null
+
+    const fullPath = path.join(postsDirectory, category, `${filename}.md`)
     const fileContents = fs.readFileSync(fullPath, 'utf8')
     const { data, content } = matter(fileContents)
 
@@ -60,6 +102,7 @@ export function getPostById(id: string): BlogPost | null {
       title: data.title || '无标题',
       content,
       excerpt: generateExcerpt(content),
+      category: data.category || category,
       createdAt: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
       updatedAt: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
       tags: data.tags || [],
@@ -71,14 +114,8 @@ export function getPostById(id: string): BlogPost | null {
 
 // 获取所有文章 ID（用于静态生成）
 export function getAllPostIds(): string[] {
-  if (!fs.existsSync(postsDirectory)) {
-    return []
-  }
-
-  const fileNames = fs.readdirSync(postsDirectory)
-  return fileNames
-    .filter(fileName => fileName.endsWith('.md'))
-    .map(fileName => fileName.replace(/\.md$/, ''))
+  const posts = getAllPosts()
+  return posts.map(post => post.id)
 }
 
 // 从 markdown 内容生成摘要
